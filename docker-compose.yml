@@ -30,22 +30,3 @@ services:
             MYSQL_DATABASE: local_pricing
             MYSQL_ROOT_PASSWORD : 123456
         network_mode: bridge
-
-    rabbitqm:
-        build: ./rabbitqm
-#        environment:
-#            RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
-#            RABBITMQ_DEFAULT_USER: "rabbitmq"
-#            RABBITMQ_DEFAULT_PASS: "rabbitmq"
-#            RABBITMQ_DEFAULT_VHOST: "/"
-        ports:
-        - "5672:5672"
-        volumes:
-        - ./rabbitqm/etc/rabbitmq-isolated.conf:/etc/rabbitmq/rabbitmq.config
-
-    redis:
-        image: redis:4.0
-        ports:
-        - "6382:6379"
-        volumes:
-        - ./redis/data:/data
