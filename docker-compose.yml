@@ -1,0 +1,51 @@
+version: '2'
+services:
+    nginx:
+        build: ./nginx
+        ports:
+            - "8081:80"
+        volumes:
+            - ./Projects:/var/www/html/:z
+            - ./conf.d:/etc/nginx/conf.d/:z
+            - ./logs:/log:z
+        network_mode: host
+
+    phpfpm:
+        build: ./phpfpm
+        ports:
+            - "9000:9000"
+            - "9999:9999"
+        volumes:
+            - ./Projects:/var/www/html:z
+        network_mode: host
+
+    mysql:
+        build: ./mysql
+        restart: always
+        ports:
+            - "3307:3306"
+        volumes:
+            - ./mysql/data:/var/lib/mysql/:z
+        environment:
+            MYSQL_DATABASE: local_pricing
+            MYSQL_ROOT_PASSWORD : 123456
+        network_mode: bridge
+
+    rabbitqm:
+        build: ./rabbitqm
+#        environment:
+#            RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+#            RABBITMQ_DEFAULT_USER: "rabbitmq"
+#            RABBITMQ_DEFAULT_PASS: "rabbitmq"
+#            RABBITMQ_DEFAULT_VHOST: "/"
+        ports:
+        - "5672:5672"
+        volumes:
+        - ./rabbitqm/etc/rabbitmq-isolated.conf:/etc/rabbitmq/rabbitmq.config
+
+    redis:
+        image: redis:4.0
+        ports:
+        - "6382:6379"
+        volumes:
+        - ./redis/data:/data
